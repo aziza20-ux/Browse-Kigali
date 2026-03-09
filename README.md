@@ -18,11 +18,8 @@ User Authentication: Sign up, log in, and manage your profile.
 
 Categories: Listings are organized by categories to facilitate browsing and filtering.
 
-lib/
-├── screens/          # UI screens of the app (HomeScreen, ListingDetail, Login, etc.)
-├── services/         # Firebase interaction and other backend services (AuthService, ListingService)
-├── state_management/ # Providers for state management (AuthProvider, ListingProvider, CategoryProvider)
-├── models/           # Data models (UserModel, ListingModel, CategoryModel)
+<img width="951" height="136" alt="image" src="https://github.com/user-attachments/assets/a1406ee7-2371-4a78-b803-224b93de5b7b" />
+
 
 <img width="601" height="535" alt="image" src="https://github.com/user-attachments/assets/8bd9f976-60f4-4801-b479-a4cba45c45a1" />
 
