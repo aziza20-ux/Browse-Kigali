@@ -18,7 +18,14 @@ User Authentication: Sign up, log in, and manage your profile.
 
 Categories: Listings are organized by categories to facilitate browsing and filtering.
 
-Project Structure lib/ ├── screens/ # UI screens of the app (HomeScreen, ListingDetail, Login, etc.) ├── services/ # Firebase interaction and other backend services (AuthService, ListingService) ├── state_management/ # Providers for state management (AuthProvider, ListingProvider, DirectoryProvider) ├── models/ # Data models (UserModel, ListingModel) Firestore Database Structure Firestore Root │ ├── users │ ├── {userId} │ │ ├── name: string │ │ ├── email: string │ │ └── profilePic: string (optional) │ ├── listings │ ├── {listingId} │ │ ├── name: string │ │ ├── description: string │ │ ├── category: string │ │ ├── images: array of strings (image URLs) │ │ ├── location: │ │ │ ├── latitude: double │ │ │ └── longitude: double │ │ └── contact: string │
+lib/
+├── screens/          # UI screens of the app (HomeScreen, ListingDetail, Login, etc.)
+├── services/         # Firebase interaction and other backend services (AuthService, ListingService)
+├── state_management/ # Providers for state management (AuthProvider, ListingProvider, CategoryProvider)
+├── models/           # Data models (UserModel, ListingModel, CategoryModel)
+
+<img width="601" height="535" alt="image" src="https://github.com/user-attachments/assets/8bd9f976-60f4-4801-b479-a4cba45c45a1" />
+
 
 Notes:
 
