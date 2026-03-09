@@ -15,10 +15,21 @@ class ListingForm extends StatefulWidget {
 }
 
 class _ListingFormState extends State<ListingForm> {
+  static const List<String> _categories = [
+    'Hospital',
+    'Police Station',
+    'Library',
+    'Restaurant',
+    'Café',
+    'Park',
+    'construction',
+    'Tourist Attraction',
+  ];
+
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _nameController;
-  late TextEditingController _categoryController;
+  String? _selectedCategory;
   late TextEditingController _addressController;
   late TextEditingController _contactController;
   late TextEditingController _descriptionController;
@@ -30,24 +41,27 @@ class _ListingFormState extends State<ListingForm> {
     super.initState();
 
     _nameController = TextEditingController(text: widget.listing?.name ?? '');
-    _categoryController =
-        TextEditingController(text: widget.listing?.category ?? '');
-    _addressController =
-        TextEditingController(text: widget.listing?.address ?? '');
-    _contactController =
-        TextEditingController(text: widget.listing?.contactNumber ?? '');
-    _descriptionController =
-        TextEditingController(text: widget.listing?.description ?? '');
-    _latitudeController =
-        TextEditingController(text: widget.listing?.latitude.toString() ?? '');
-    _longitudeController =
-        TextEditingController(text: widget.listing?.longitude.toString() ?? '');
+    _selectedCategory = widget.listing?.category;
+    _addressController = TextEditingController(
+      text: widget.listing?.address ?? '',
+    );
+    _contactController = TextEditingController(
+      text: widget.listing?.contactNumber ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: widget.listing?.description ?? '',
+    );
+    _latitudeController = TextEditingController(
+      text: widget.listing?.latitude.toString() ?? '',
+    );
+    _longitudeController = TextEditingController(
+      text: widget.listing?.longitude.toString() ?? '',
+    );
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _categoryController.dispose();
     _addressController.dispose();
     _contactController.dispose();
     _descriptionController.dispose();
@@ -62,7 +76,7 @@ class _ListingFormState extends State<ListingForm> {
     final listing = ListingModel(
       id: widget.listing?.id ?? '',
       name: _nameController.text.trim(),
-      category: _categoryController.text.trim(),
+      category: _selectedCategory?.trim() ?? '',
       address: _addressController.text.trim(),
       contactNumber: _contactController.text.trim(),
       description: _descriptionController.text.trim(),
@@ -77,25 +91,37 @@ class _ListingFormState extends State<ListingForm> {
     try {
       if (widget.listing == null) {
         await provider.addListing(listing);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Listing created')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Listing created')));
       } else {
         await provider.updateListing(listing);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Listing updated')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Listing updated')));
       }
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final categories = [..._categories];
+    if (_selectedCategory != null &&
+        _selectedCategory!.isNotEmpty &&
+        !categories.contains(_selectedCategory)) {
+      categories.add(_selectedCategory!);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.listing == null ? 'Create Listing' : 'Update Listing'),
+        title: Text(
+          widget.listing == null ? 'Create Listing' : 'Update Listing',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -106,41 +132,66 @@ class _ListingFormState extends State<ListingForm> {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Place/Service Name'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter name' : null,
+                  decoration: const InputDecoration(
+                    labelText: 'Place/Service Name',
+                  ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter name' : null,
                 ),
-                TextFormField(
-                  controller: _categoryController,
+                DropdownButtonFormField<String>(
+                  initialValue:
+                      _selectedCategory != null && _selectedCategory!.isNotEmpty
+                      ? _selectedCategory
+                      : null,
+                  items: categories
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) => setState(() {
+                    _selectedCategory = value;
+                  }),
                   decoration: const InputDecoration(labelText: 'Category'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter category' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Select category' : null,
                 ),
                 TextFormField(
                   controller: _addressController,
                   decoration: const InputDecoration(labelText: 'Address'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter address' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter address' : null,
                 ),
                 TextFormField(
                   controller: _contactController,
-                  decoration: const InputDecoration(labelText: 'Contact Number'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter contact' : null,
+                  decoration: const InputDecoration(
+                    labelText: 'Contact Number',
+                  ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter contact' : null,
                   keyboardType: TextInputType.phone,
                 ),
                 TextFormField(
                   controller: _descriptionController,
                   decoration: const InputDecoration(labelText: 'Description'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter description' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter description' : null,
                   maxLines: 3,
                 ),
                 TextFormField(
                   controller: _latitudeController,
                   decoration: const InputDecoration(labelText: 'Latitude'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter latitude' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter latitude' : null,
                   keyboardType: TextInputType.number,
                 ),
                 TextFormField(
                   controller: _longitudeController,
                   decoration: const InputDecoration(labelText: 'Longitude'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter longitude' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Enter longitude' : null,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
