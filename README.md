@@ -2,7 +2,7 @@ Browse-Kigali
 
 Browse-Kigali is a Flutter mobile application that helps users explore Kigali’s businesses, services, and points of interest. It provides an intuitive interface to browse listings, view detailed information with location maps, and navigate to selected locations with turn-by-turn directions.
 
-Features
+##Features
 
 Browse Listings: View different service providers, businesses, and points of interest in Kigali.
 
@@ -54,7 +54,7 @@ Getting Started
 
 Clone the repository:
 
-git clone https://github.com/yourusername/browse-kigali.git
+git clone https://github.com/aziza20-ux/Browse-Kigali.git
 
 Install dependencies:
 
