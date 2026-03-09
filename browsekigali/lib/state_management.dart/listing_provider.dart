@@ -18,7 +18,7 @@ class ListingProvider with ChangeNotifier {
     _listingService.getAllListingings().listen((updatedListings) {
       _listings = updatedListings;
       _isLoading = false;
-      notifyListeners(); // update UI
+      notifyListeners(); // notify ui to be updated 
     });
   }
 
