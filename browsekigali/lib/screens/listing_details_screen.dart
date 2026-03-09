@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../models/listing_model.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'mapview.dart';
 
 class ListingDetailsScreen extends StatelessWidget {
   final ListingModel listing;
@@ -10,9 +12,10 @@ class ListingDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createdAtFormatted = DateFormat('yyyy-MM-dd – kk:mm')
-        .format(listing.createdAt.toDate());
-         final User? user = FirebaseAuth.instance.currentUser;
+    final createdAtFormatted = DateFormat(
+      'yyyy-MM-dd – kk:mm',
+    ).format(listing.createdAt.toDate());
+    final User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,6 +42,17 @@ class ListingDetailsScreen extends StatelessWidget {
                 leading: const Icon(Icons.location_on, color: Colors.redAccent),
                 title: const Text('Address'),
                 subtitle: Text(listing.address),
+                trailing: const Icon(Icons.map),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => Mapview(
+                        location: LatLng(listing.latitude, listing.longitude),
+                        title: listing.name,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             Card(
@@ -74,14 +88,17 @@ class ListingDetailsScreen extends StatelessWidget {
               child: ListTile(
                 leading: const Icon(Icons.person, color: Colors.brown),
                 title: const Text('Created By'),
-                subtitle: Text(user!.email!),
+                subtitle: Text(listing.id),
               ),
             ),
             Card(
               elevation: 3,
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
-                leading: const Icon(Icons.calendar_today, color: Colors.blueGrey),
+                leading: const Icon(
+                  Icons.calendar_today,
+                  color: Colors.blueGrey,
+                ),
                 title: const Text('Created At'),
                 subtitle: Text(createdAtFormatted),
               ),

@@ -5,6 +5,7 @@ import 'package:browsekigali/screens/settings.dart';
 import 'package:browsekigali/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,12 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final User? user = FirebaseAuth.instance.currentUser;
   int myIndex = 0;
   //list of screens to show bottom navigation
-  final List<Widget> screens = [ 
+  final List<Widget> screens = [
     HomeScreene(),
-    MyListingsScreen(currentUserId:AuthService().currentUser!.uid), 
-    Mapview(),
-    Settings()
-    ];
+    MyListingsScreen(currentUserId: AuthService().currentUser!.uid),
+    Mapview(location: LatLng(-1.9505, 29.8739), title: 'Kigali'),
+    Settings(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,22 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_add),
-            label: 'MyListings'
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'MapView'
-              ),
+            label: 'MyListings',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'MapView'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings'
-            )
+            label: 'Settings',
+          ),
         ],
       ),
     );

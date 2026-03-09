@@ -2,6 +2,7 @@ import 'package:browsekigali/state_management.dart/directory.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/listing_model.dart';
+import 'listing_details_screen.dart';
 
 class HomeScreene extends StatefulWidget {
   const HomeScreene({super.key});
@@ -140,20 +141,24 @@ class _HomeScreenState extends State<HomeScreene> {
 
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
-
                         child: ListTile(
                           title: Text(listing.name),
-
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(listing.category),
-
                               Text(listing.address),
                             ],
                           ),
-
                           trailing: const Icon(Icons.arrow_forward),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ListingDetailsScreen(listing: listing),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
